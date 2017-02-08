@@ -7395,7 +7395,6 @@ var UIRouterPluginBase = (function () {
  * https://github.com/angular/angular/blob/42a287fabf6b035d51e00cf3006c27fec00f054a/modules/%40angular/compiler/src/ng_module_resolver.ts
  * but unfortunately not all platforms (namely browser-dynamic) provide it.
  */
-var reflector = _angular_core.__core_private__.reflector;
 
 /**
  * This is a [[StateBuilder.builder]] function for angular2 `views`.
@@ -7480,29 +7479,6 @@ var MergeInjector = (function () {
 
 /** @hidden */
 var id = 0;
-/**
- * Given a component class, gets the inputs of styles:
- *
- * - @Input('foo') _foo
- * - `inputs: ['foo']`
- *
- * @internalapi
- */
-var ng2ComponentInputs = function (ng2CompClass) {
-    /** Get "@Input('foo') _foo" inputs */
-    var props = reflector.propMetadata(ng2CompClass);
-    var _props = Object.keys(props || {})
-        .map(function (key) { return ({ key: key, annoArr: props[key] }); })
-        .reduce(function (acc, tuple) { return acc.concat(tuple.annoArr.map(function (anno) { return ({ key: tuple.key, anno: anno }); })); }, [])
-        .map(function (tuple) { return ({ token: tuple.anno.bindingPropertyName || tuple.key, prop: tuple.key }); });
-    /** Get "inputs: ['foo']" inputs */
-    var inputs = reflector.annotations(ng2CompClass)
-        .filter(function (x) { return x instanceof _angular_core.Component && !!x.inputs; })
-        .map(function (x) { return x.inputs; })
-        .reduce(flattenR, [])
-        .map(function (input) { return ({ token: input, prop: input }); });
-    return _props.concat(inputs);
-};
 /**
  * A UI-Router viewport directive, which is filled in by a view (component) on a state.
  *
@@ -7654,7 +7630,19 @@ var UIView = (function () {
             resolvable: context.getResolvable(bindings[tuple.prop] || tuple.token)
         }); };
         // Supply resolve data to matching @Input('prop') or inputs: ['prop']
-        var inputTuples = ng2ComponentInputs(componentClass);
+        // let inputTuples = ng2ComponentInputs(componentClass);
+        var inputTuples = [];
+        var tokens = context.getTokens();
+        if (tokens) {
+            tokens.forEach(function (token) {
+                if (/^[A-Za-z]*$/g.test(token)) {
+                    inputTuples.push({
+                        token: token,
+                        prop: token
+                    });
+                }
+            });
+        }
         inputTuples.map(addResolvable)
             .filter(function (tuple) { return tuple.resolvable && tuple.resolvable.resolved; })
             .forEach(function (tuple) { ref.instance[tuple.prop] = tuple.resolvable.data; });
@@ -8171,6 +8159,14 @@ var _UIROUTER_DIRECTIVES = [UISref, AnchorUISref, UIView, UISrefActive, UISrefSt
  * @internalapi
  */
 var UIROUTER_DIRECTIVES = _UIROUTER_DIRECTIVES;
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * @license
