@@ -96,30 +96,6 @@ MergeInjector.NOT_FOUND = {};
 /** @hidden */
 var id = 0;
 /**
- * Given a component class, gets the inputs of styles:
- *
- * - @Input('foo') _foo
- * - `inputs: ['foo']`
- *
- * @internalapi
- */
-var ng2ComponentInputs = function (reflector, ng2CompClass, component) {
-    /** Get "@Input('foo') _foo" inputs */
-    var props = reflector.propMetadata(ng2CompClass);
-    var _props = Object.keys(props || {})
-        .map(function (key) { return ({ key: key, annoArr: props[key] }); })
-        .reduce(function (acc, tuple) { return acc.concat(tuple.annoArr.map(function (anno) { return ({ key: tuple.key, anno: anno }); })); }, [])
-        .filter(function (tuple) { return tuple.anno instanceof _angular_core.Input; })
-        .map(function (tuple) { return ({ token: tuple.anno.bindingPropertyName || tuple.key, prop: tuple.key }); });
-    /** Get "inputs: ['foo']" inputs */
-    var inputs = reflector.annotations(ng2CompClass)
-        .filter(function (x) { return x instanceof _angular_core.Component && !!x.inputs; })
-        .map(function (x) { return x.inputs; })
-        .reduce(_uirouter_core.flattenR, [])
-        .map(function (input) { return ({ token: input, prop: input }); });
-    return _props.concat(inputs);
-};
-/**
  * A UI-Router viewport directive, which is filled in by a view (component) on a state.
  *
  * ### Selector
@@ -296,11 +272,24 @@ var UIView = (function () {
         // Supply resolve data to matching @Input('prop') or inputs: ['prop']
         var explicitInputTuples = explicitBoundProps
             .reduce(function (acc, key) { return acc.concat([{ prop: key, token: bindings[key] }]); }, []);
-        var implicitInputTuples = ng2ComponentInputs(this.reflector, componentClass, component)
-            .filter(function (tuple) { return !_uirouter_core.inArray(explicitBoundProps, tuple.prop); });
+        // const implicitInputTuples = ng2ComponentInputs(this.reflector, componentClass, component)
+        //     .filter(tuple => !inArray(explicitBoundProps, tuple.prop));
+        var implicitInputTuples = [];
+        var tokens = context.getTokens();
+        if (tokens) {
+            tokens.forEach(function (token) {
+                if (/^[A-Za-z]*$/g.test(token)) {
+                    implicitInputTuples.push({
+                        token: token,
+                        prop: token
+                    });
+                }
+            });
+        }
+        implicitInputTuples = implicitInputTuples.filter(function (tuple) { return !_uirouter_core.inArray(explicitBoundProps, tuple.prop); });
         var addResolvable = function (tuple) { return ({
             prop: tuple.prop,
-            resolvable: context.getResolvable(tuple.token),
+            resolvable: context.getResolvable(tuple.token)
         }); };
         explicitInputTuples.concat(implicitInputTuples)
             .map(addResolvable)
