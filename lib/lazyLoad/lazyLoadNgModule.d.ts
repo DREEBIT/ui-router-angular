@@ -1,7 +1,7 @@
 /** @ng2api @module core */
 /** */
 import { NgModuleRef, Injector, NgModuleFactory, Type } from "@angular/core";
-import { Transition, LazyLoadResult } from "ui-router-core";
+import { Transition, LazyLoadResult } from "@uirouter/core";
 import { RootModule } from "../uiRouterNgModule";
 /**
  * A function that returns an NgModule, or a promise for an NgModule

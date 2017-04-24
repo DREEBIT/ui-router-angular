@@ -1,8 +1,8 @@
 /** @module ng2 */
 /** */
-import { UIRouter, BaseLocationServices } from "ui-router-core";
-import { LocationStrategy } from "@angular/common";
-/** A `LocationServices` that uses the browser hash "#" to get/set the current location */
+import { BaseLocationServices, UIRouter } from '@uirouter/core';
+import { LocationStrategy } from '@angular/common';
+/** A `LocationServices` that delegates to the Angular LocationStrategy */
 export declare class Ng2LocationServices extends BaseLocationServices {
     private _locationStrategy;
     constructor(router: UIRouter, _locationStrategy: LocationStrategy);

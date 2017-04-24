@@ -1,6 +1,6 @@
 /** @ng2api @module directives */
 /** */
-import { UIRouter, Obj, TransitionOptions, TargetState } from "ui-router-core";
+import { UIRouter, Obj, TransitionOptions, TargetState } from "@uirouter/core";
 import { ElementRef, Renderer } from "@angular/core";
 import { ParentUIViewInject } from "./uiView";
 import { ReplaySubject } from "rxjs/ReplaySubject";
@@ -100,7 +100,7 @@ export declare class UISref {
     ngOnInit(): void;
     ngOnDestroy(): void;
     update(): void;
-    getOptions(): any;
+    getOptions(): TransitionOptions;
     /** When triggered by a (click) event, this function transitions to the UISref's target state */
     go(): boolean;
 }

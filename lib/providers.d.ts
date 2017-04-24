@@ -1,17 +1,17 @@
 /**
- * # UI-Router for Angular 2
+ * # UI-Router for Angular (v2+)
  *
- * - [ui-router-ng2 home page](https://ui-router.github.io/ng2)
+ * - [@uirouter/angular home page](https://ui-router.github.io/ng2)
  * - [tutorials](https://ui-router.github.io/tutorial/ng2/helloworld)
  * - [quick start repository](http://github.com/ui-router/quickstart-ng2)
  *
  * Getting started:
  *
- * - Use npm. Add a dependency on latest `ui-router-ng2`
- * - Import UI-Router classes directly from `"ui-router-ng2"`
+ * - Use npm. Add a dependency on latest `@uirouter/angular`
+ * - Import UI-Router classes directly from `"@uirouter/angular"`
  *
  * ```js
- * import {StateRegistry} from "ui-router-ng2";
+ * import {StateRegistry} from "@uirouter/angular";
  * ```
  *
  * - Create application states (as defined by [[Ng2StateDeclaration]]).
@@ -71,7 +71,7 @@
  * Pass the class to [[UIRouterModule.forRoot]] or [[UIRouterModule.forChild]].
  *
  * ```js
- * import {UIRouter} from "ui-router-ng2";
+ * import {UIRouter} from "@uirouter/angular";
  *
  * @ Injectable()
  * export class MyUIRouterConfig {
@@ -86,16 +86,17 @@
  */
 /** */
 import { Injector, Provider } from "@angular/core";
-import { UIRouter, StateRegistry, StateService, TransitionService, UrlMatcherFactory, UrlRouter, ViewService, UrlService } from "ui-router-core";
+import { UIRouter, StateRegistry, StateService, TransitionService, UrlMatcherFactory, UrlRouter, ViewService, UrlService } from "@uirouter/core";
 import { ParentUIViewInject } from "./directives/uiView";
+import { RootModule, StatesModule } from "./uiRouterNgModule";
 import { LocationStrategy } from "@angular/common";
 /**
  * This is a factory function for a UIRouter instance
  *
- * Creates a UIRouter instance and configures it for Angular 2, then invokes router bootstrap.
- * This function is used as an Angular 2 `useFactory` Provider.
+ * Creates a UIRouter instance and configures it for Angular, then invokes router bootstrap.
+ * This function is used as an Angular `useFactory` Provider.
  */
-export declare function uiRouterFactory(locationStrategy: LocationStrategy, injector: Injector): UIRouter;
+export declare function uiRouterFactory(locationStrategy: LocationStrategy, rootModules: RootModule[], modules: StatesModule[], injector: Injector): UIRouter;
 export declare function parentUIViewInjectFactory(r: StateRegistry): ParentUIViewInject;
 export declare const _UIROUTER_INSTANCE_PROVIDERS: Provider[];
 export declare function fnStateService(r: UIRouter): StateService;

@@ -1,7 +1,8 @@
-/** @ng2api @module directives */ /** */
-import { EventEmitter, QueryList } from "@angular/core";
-import { UISref } from "./uiSref";
-import { UIRouterGlobals } from "ui-router-core";
+/** @ng2api @module directives */
+/** */
+import { EventEmitter, QueryList } from '@angular/core';
+import { UISref } from './uiSref';
+import { UIRouterGlobals } from '@uirouter/core';
 /**
  * UISref status emitted from [[UISrefStatus]]
  */

@@ -3,7 +3,7 @@
 import { Ng2StateDeclaration } from "./interface";
 import { OpaqueToken, ModuleWithProviders, Provider, Injector } from "@angular/core";
 import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from "@angular/common";
-import { UrlRuleHandlerFn, TargetState, TargetStateDef, UIRouter } from "ui-router-core";
+import { UrlRuleHandlerFn, TargetState, TargetStateDef, UIRouter } from "@uirouter/core";
 /** @hidden */ export declare const UIROUTER_ROOT_MODULE: OpaqueToken;
 /** @hidden */ export declare const UIROUTER_MODULE_TOKEN: OpaqueToken;
 /** @hidden */ export declare const UIROUTER_STATES: OpaqueToken;
@@ -11,13 +11,13 @@ export declare function makeRootProviders(module: StatesModule): Provider[];
 export declare function makeChildProviders(module: StatesModule): Provider[];
 export declare function locationStrategy(useHash: any): {
     provide: typeof LocationStrategy;
-    useClass: typeof HashLocationStrategy | typeof PathLocationStrategy;
+    useClass: typeof PathLocationStrategy | typeof HashLocationStrategy;
 };
 /**
  * Creates UI-Router Modules
  *
  * This class has two static factory methods which create UIRouter Modules.
- * A UI-Router Module is an [Angular 2 NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
+ * A UI-Router Module is an [Angular NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
  * with support for UI-Router.
  *
  * ### UIRouter Directives
@@ -38,7 +38,7 @@ export declare class UIRouterModule {
     /**
      * Creates a UI-Router Module for the root (bootstrapped) application module to import
      *
-     * This factory function creates an [Angular 2 NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
+     * This factory function creates an [Angular NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
      * with UI-Router support.
      *
      * The `forRoot` module should be added to the `imports:` of the `NgModule` being bootstrapped.
@@ -75,7 +75,7 @@ export declare class UIRouterModule {
     /**
      * Creates an `NgModule` for a UIRouter module
      *
-     * This function creates an [Angular 2 NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
+     * This function creates an [Angular NgModule](https://angular.io/docs/ts/latest/guide/ngmodule.html)
      * with UI-Router support.
      *
      * #### Example:
@@ -139,16 +139,17 @@ export interface StatesModule {
      *
      * If a UI-Router Module needs to perform some configuration (such as registering
      * parameter types or Transition Hooks) a `configFn` should be supplied.
-     * The function will be passed the `UIRouter` instance and the module's `Injector`
+     * The function will be passed the `UIRouter` instance, the module's `Injector`,
+     * and the module object.
      *
      * #### Example:
      * ```js
      * import { Injector } from "@angular/core";
-     * import { UIRouter } from "ui-router-ng2";
+     * import { UIRouter } from "@uirouter/angular";
      * import { requireAuthHook } from "./requireAuthHook";
      * import { MyService } from "./myService";
      *
-     * export function configureMyModule(uiRouter: UIRouter, injector: Injector) {
+     * export function configureMyModule(uiRouter: UIRouter, injector: Injector, module: StatesModule) {
      *   // Get UIRouter services off the UIRouter object
      *   let urlConfig = uiRouter.urlService.config;
      *   let transitionService = uiRouter.transitionService;
@@ -176,5 +177,5 @@ export interface StatesModule {
      * class MyModule {}
      * ```
      */
-    config?: (uiRouterInstance: UIRouter, injector: Injector) => any;
+    config?: (uiRouterInstance: UIRouter, injector: Injector, module: StatesModule) => any;
 }

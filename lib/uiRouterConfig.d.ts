@@ -1,6 +1,6 @@
 /** @module ng2 */ /** */
-import { UIRouter } from "ui-router-core";
+import { UIRouter, StateObject } from "@uirouter/core";
 import { StatesModule, RootModule } from "./uiRouterNgModule";
 import { Injector } from "@angular/core";
-export declare function applyModuleConfig(uiRouter: UIRouter, injector: Injector, options?: StatesModule): void;
-export declare function applyRootModuleConfig(uiRouter: UIRouter, injector: Injector, config: RootModule): void;
+export declare function applyModuleConfig(uiRouter: UIRouter, injector: Injector, module?: StatesModule): StateObject[];
+export declare function applyRootModuleConfig(uiRouter: UIRouter, injector: Injector, module: RootModule): void;

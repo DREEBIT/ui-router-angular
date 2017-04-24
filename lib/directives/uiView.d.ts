@@ -1,9 +1,9 @@
-/** @ng2api @module directives */ /** */
+/** @ng2api @module directives */
+/** */
 import { ViewContainerRef, ComponentRef, Injector } from '@angular/core';
-import { UIRouter } from "ui-router-core";
-import { ViewContext, ViewConfig, ActiveUIView } from "ui-router-core";
-import { Ng2ViewConfig } from "../statebuilders/views";
-import { ResolveContext } from "ui-router-core";
+import { ɵReflectorReader as ReflectorReader } from '@angular/core';
+import { UIRouter, Transition, ViewContext, ViewConfig, ActiveUIView, ResolveContext } from '@uirouter/core';
+import { Ng2ViewConfig } from '../statebuilders/views';
 /** @internalapi These are provide()d as the string UIView.PARENT_INJECT */
 export interface ParentUIViewInject {
     context: ViewContext;
@@ -58,16 +58,31 @@ export interface ParentUIViewInject {
 export declare class UIView {
     router: UIRouter;
     viewContainerRef: ViewContainerRef;
+    private reflector;
     componentTarget: ViewContainerRef;
     name: string;
     _name: string;
+    /** The reference to the component currently inside the viewport */
     componentRef: ComponentRef<any>;
-    deregister: Function;
+    /** Deregisters the ui-view from the view service */
+    deregisterUIView: Function;
+    /** Deregisters the master uiCanExit transition hook */
+    deregisterHook: Function;
+    /** Data about the this UIView */
     uiViewData: ActiveUIView;
     parent: ParentUIViewInject;
     static PARENT_INJECT: string;
-    constructor(router: UIRouter, parent: any, viewContainerRef: ViewContainerRef);
+    constructor(router: UIRouter, parent: any, viewContainerRef: ViewContainerRef, reflector: ReflectorReader);
     ngOnInit(): void;
+    /**
+     * For each transition, checks the component loaded in the ui-view for:
+     *
+     * - has a uiCanExit() component hook
+     * - is being exited
+     *
+     * If both are true, adds the uiCanExit component function as a hook to that singular Transition.
+     */
+    applyUiCanExitHook(trans: Transition): void;
     disposeLast(): void;
     ngOnDestroy(): void;
     /**
